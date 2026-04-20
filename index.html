@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For You 💖</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+<style>
+body {
+  margin: 0;
+  font-size: 35px;
+  background: black;
+  color: white;
+  overflow-x: hidden;
+}
+
+/* INTRO */
+#intro {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.fadeText {
+  font-size: 36px;
+  transition: opacity 0.5s;
+}
+
+/* MAIN UI */
+.container {
+  display: none;
+  text-align: center;
+  padding: 20px;
+  background: linear-gradient(135deg, #6096fd, #fb7bbe);
+  min-height: 100vh;
+  color: #333;
+}
+
+button {
+  padding: 55px 55px;
+  margin: 45px;
+  border-radius: 25px;
+  border: none;
+  background: #ff4d6d;
+  color: white;
+  cursor: pointer;
+  font-size: 35px;
+
+  transition: all 0.25s ease;
+  box-shadow: 0 5px 0 #dca9b3;
+  position: relative;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* ✨ HOVER POP EFFECT */
+button:hover {
+  transform: translateY(-6px) scale(1.08);
+  box-shadow: 0 12px 20px rgba(255, 77, 109, 0.4);
+  background: #ff3355;
+}
+
+/* 💥 CLICK PRESS EFFECT */
+button:active {
+  transform: translateY(2px) scale(0.98);
+  box-shadow: 0 3px 0 #c73b56;
+}
+
+
+.card {
+  background: #c0d7ea;
+  padding: 25px;
+  border-radius: 25px;
+  margin: 20px auto;
+  max-width: 600px;
+}
+
+.photo, .video {
+  width: 90%;
+  border-radius: 15px;
+  margin: 10px 0;
+}
+
+/* typing */
+.typing {
+  border-right: 2px solid;
+  white-space: pre-line;
+}
+
+/* hearts */
+.heart {
+  position: fixed;
+  bottom: 0;
+  animation: float 5s linear infinite;
+}
+
+#lockScreen {
+  position: fixed;
+  inset: 0;
+  background: black;
+  color: white;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  z-index: 9999;
+}
+
+#passInput {
+  padding: 15px;
+  margin: 15px;
+  border-radius: 10px;
+  border: none;
+  font-size: 18px;
+}
+
+#errorMsg {
+  color: red;
+}
+
+/* 🔴 Shake animation */
+@keyframes shake {
+  0% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-6px); }
+  80% { transform: translateX(6px); }
+  100% { transform: translateX(0); }
+}
+
+/* apply shake */
+.shake {
+  animation: shake 0.4s;
+}
+
+/* optional: input error glow */
+.input-error {
+  box-shadow: 0 0 10px red;
+}
+
+@keyframes float {
+  from {transform: translateY(0);}
+  to {transform: translateY(-100vh);}
+}
+</style>
+</head>
+
+<body>
+
+<div id="lockScreen">
+    <h2>🔒 Enter Passcode</h2>
+    <input type="password" id="passInput" placeholder=" Your favorite Mitha! 😁">
+    <button onclick="unlock()">Unlock</button>
+    <p id="errorMsg"></p>
+</div>
+
+<!-- 🎬 INTRO -->
+<div id="intro" style="display:none;">
+    <div class="fadeText"></div>
+</div>
+
+<!-- 🎵 MUSIC -->
+<audio id="bgMusic" loop>
+  <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<!-- 🏠 MAIN -->
+<div class="container" id="mainMenu">
+  <h1>💖 For My Favorite Human 💖</h1>
+
+  <button onclick="showSection('openWhen')">Open When 💌</button>
+  <button onclick="showSection('manual')">Guide 📖</button>
+  <button onclick="showSection('memories')">Memories 🧠</button>
+  <button onclick="showSection('photos')">Photos 📸</button>
+  <button onclick="showSection('videos')">Videos 🎥</button>
+  <button onclick="showSection('jar')">Jar 💌</button>
+  <button onclick="showSection('chef')">Chef Menu 🍝</button>
+  <button onclick="showFinal()">Final 🎬</button>
+</div>
+
+<!-- 💌 OPEN WHEN -->
+<div class="container" id="openWhen">
+  <h2>Open When...</h2>
+  <button onclick="showTyping('stressed')">Stressed</button>
+  <button onclick="showTyping('laugh')">Need Laugh</button>
+  <button onclick="showTyping('miss')">Miss Me</button>
+  <p id="typingBox" class="typing"></p>
+  <button onclick="goBack()">Back</button>
+</div>
+
+<!-- 📖 MANUAL -->
+<div class="container" id="manual">
+  <h2>Guide to You</h2>
+  <div class="card">🛠 Instructions for Use 
+    <br>  <h4>Handle with snacks 🍫
+        <br> Do NOT argue when hungry
+        <br>Needs attention but won’t admit it
+        <br>Random mood swings included (no refunds)</h4></div>
+  <div class="card">🔧 Maintenance Guide 
+    <br>  <h4>Handle with snacks 🍫
+        <br> roasting daily!
+        <br>Give hugs (mandatory)
+        <br>Listen when she vents <br>(even if it’s the same story again 😭)</h4>
+  </div>
+  <div class="card">✨ Special Features
+<br>  <h4>Mind reader (scary accurate)
+    <br>Laughs at the worst times <br>(lol warden ke samneee 😂😂)
+    <br>Loyal to the core!😎
+    <br>Makes life 100x better! 🤩🥳</h4>
+  </div>
+  <button onclick="goBack()">Back</button>
+</div>
+
+<!-- 🧠 MEMORIES -->
+<div class="container" id="memories">
+  <h2>Memory Lane</h2>
+  <div class="card"> Days we laughed so hard we couldn’t breathe… and people were staring 😂</div>
+  <div class="card">Our random late-night talks that made no sense but meant everything ✨✨</div>
+  <div class="card">Study together! 📄, Uff one of my favorite things!</div>
+  <div class="card">Fight together,roke extreme tak le jahan 🤪 and then ek dusre lo vo manana!😝 </div>
+  <div class="card">Every time we said ‘last story’ and then talked for another hour 💖</div>
+  <button onclick="goBack()">Back</button>
+</div>
+
+<!-- 📸 PHOTOS -->
+<div class="container" id="photos">
+  <h2>Photos</h2>
+  <img src="https://via.placeholder.com/300" class="photo">
+  <p>Pure chaos moment 💖</p>
+  <button onclick="goBack()">Back</button>
+</div>
+
+<!-- 🎥 VIDEOS -->
+<div class="container" id="videos">
+  <h2>Videos</h2>
+
+  <video class="video" controls>
+    <source src="your-video.mp4" type="video/mp4">
+  </video>
+
+  <iframe class="video" height="200"
+    src="https://www.youtube.com/embed/YOUR_VIDEO_ID"
+    frameborder="0"
+    allowfullscreen>
+  </iframe>
+
+  <button onclick="goBack()">Back</button>
+</div>
+
+<!-- 🫙 JAR -->
+<div class="container" id="jar">
+  <h2>Jar of Reasons</h2>
+  <button onclick="randomNote()">Pick One</button>
+  <div id="noteBox" class="card"></div>
+  <button onclick="goBack()">Back</button>
+</div>
+
+<!-- 🍝 CHEF -->
+<div class="container" id="chef">
+  <h2>Today's Menu</h2>
+  <div class="card">🍝 Drama Queen Pasta</div>
+  <div class="card">🍜 Bestie Maggi</div>
+  <div class="card">🍰 Memory Dessert</div>
+  <button onclick="goBack()">Back</button>
+</div>
+
+<!-- 🎬 FINAL -->
+<div class="container" id="final">
+  <h1 id="finalText" class="typing"></h1>
+</div>
+
+<script>
+
+// 🎬 INTRO FIXED
+const texts = ["Hey Maanu...", "I made something for you...", "Tap anywhere 💖"];
+let i = 0;
+const el = document.querySelector(".fadeText");
+
+
+function startIntro() {
+  const texts = ["Hey Maanu...", "I made something for you...", "Tap anywhere 💖"];
+  let i = 0;
+  const el = document.querySelector(".fadeText");
+
+  el.innerText = texts[i];
+
+  const interval = setInterval(() => {
+    i++;
+    if (i < texts.length) {
+      el.style.opacity = 0;
+      setTimeout(() => {
+        el.innerText = texts[i];
+        el.style.opacity = 1;
+      }, 500);
+    } else {
+      clearInterval(interval);
+      document.getElementById("intro").onclick = startApp;
+    }
+  }, 2500);
+}
+
+function unlock() {
+  const passInput = document.getElementById("passInput");
+  const pass = passInput.value.toLowerCase();
+  const lockScreen = document.getElementById("lockScreen");
+
+  if (pass === "moong halwa") {
+    lockScreen.style.display = "none";
+    document.getElementById("intro").style.display = "flex";
+    startIntro();
+  } else {
+    //  wrong password
+
+    document.getElementById("errorMsg").innerText = "Wrong password 😁";
+
+    // 🔴 shake effect
+    lockScreen.classList.add("shake");
+    passInput.classList.add("input-error");
+
+    // remove after animation
+    setTimeout(() => {
+      lockScreen.classList.remove("shake");
+      passInput.classList.remove("input-error");
+    }, 400);
+
+    // clear input
+    passInput.value = "";
+  }
+}
+
+function startApp() {
+  document.getElementById("intro").style.display = "none";
+  document.getElementById("mainMenu").style.display = "block";
+
+  const music = document.getElementById("bgMusic");
+  music.play().catch(()=>{});
+
+  createHearts();
+}
+
+// navigation
+function showSection(id) {
+  document.querySelectorAll(".container").forEach(c => c.style.display="none");
+  document.getElementById(id).style.display="block";
+}
+
+function goBack() {
+  document.querySelectorAll(".container").forEach(c => c.style.display="none");
+  document.getElementById("mainMenu").style.display="block";
+}
+
+// typing
+function typeText(el, text, speed=40) {
+  el.innerHTML="";
+  let i=0;
+  function t(){
+    if(i<text.length){
+      el.innerHTML+=text.charAt(i);
+      i++;
+      setTimeout(t,speed);
+    }
+  }
+  t();
+}
+
+function showTyping(type) {
+  const messages = {
+    stressed : "Hey baby… take a deep breath, relax. Sab theek h, you always figure things out, bas thoda sa slow down kar. Pani pee le, kuch kha le, aur overthinking band 😤💖. Ab zyada soch mat… just call me, okay? I’m right here, mujpe chila dena puraa. I'm always here for u! 💖",
+    laugh: "bhai Yaad kr vo jo hum bina reason ke kitna haste h? Aur hum toh itna ladte hi rehte hain —- especially jab kisi aur ke saamne ladte hainnn, tohh unki toh halat hi kharab ho jaati hai 😂😂😂, bechare confuse ho jaate hain ki ho kya raha hai… aur hum? Hume toh usme bhi maza aata hai 😏. Tu literally full-on crack hai… but sirf meri h! 🤡💖. Go look in the mirror—instant comedy show. Aur agar phir bhi mood theek na ho, text me… I’ll roast you 😌.",
+    miss: "Missing me? Good… I know, I’m unforgettable 😌. I’m not that far, bas phone uthana hai—I’m right here. Tu jahan bhi hai, thodi si main tere saath hoon always! (annoying, I know 🥺). Call me… I’ll pretend I wasn’t waiting 💖."
+  };
+  typeText(document.getElementById("typingBox"), messages[type]);
+}
+
+// hearts
+function createHearts() {
+  setInterval(()=>{
+    let h=document.createElement("div");
+    h.className="heart";
+    h.innerText="💖";
+    h.style.left=Math.random()*100+"vw";
+    h.style.fontSize=(Math.random()*20+10)+"px";
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),5000);
+  },300);
+}
+
+// jar
+function randomNote() {
+  const notes = [
+    "You understand me without words 💖",
+    "We laugh like crazy 😂",
+    "You're my safe place",
+    "Life = better with you",
+    "You make everything feel lighter 💖",
+    "You understand me without explaining",
+    "Life is just better with you in it",
+    "You’re annoying… but I’d still choose you every time"
+  ];
+  document.getElementById("noteBox").innerText =
+    notes[Math.floor(Math.random()*notes.length)];
+}
+
+// final
+function showFinal() {
+  document.querySelectorAll(".container").forEach(c => c.style.display="none");
+  document.getElementById("final").style.display="block";
+
+  let msg = `I know you're not a fan of birthdays...
+So let's call this...
+
+Annual Appreciation Day 💖
+
+For my favorite human.
+
+Also... there's cake 🎂
+And it's illegal to say no.`;
+
+  typeText(document.getElementById("finalText"), msg, 35);
+}
+
+
+// 🧲 Magnetic Button Effect
+const buttons = document.querySelectorAll("button");
+
+buttons.forEach(btn => {
+
+  btn.addEventListener("mousemove", (e) => {
+    const rect = btn.getBoundingClientRect();
+
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+
+    // control intensity (lower = subtle, higher = stronger)
+    const strength = 0.3;
+
+    btn.style.transform = `translate(${x * strength}px, ${y * strength}px) scale(1.05)`;
+  });
+
+  btn.addEventListener("mouseleave", () => {
+    btn.style.transform = "translate(0px, 0px) scale(1)";
+  });
+
+});
+
+</script>
+
+</body>
+</html>
